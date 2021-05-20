@@ -3,6 +3,8 @@ package co.com.sofka.questions.collections;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document
 public class Question {
     @Id
@@ -17,7 +19,7 @@ public class Question {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id, "id id is required");
     }
 
     public String getUserId() {
@@ -25,7 +27,7 @@ public class Question {
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userId = Objects.requireNonNull(userId, "user id is required");
     }
 
     public String getQuestion() {
@@ -33,7 +35,7 @@ public class Question {
     }
 
     public void setQuestion(String question) {
-        this.question = question;
+        this.question = Objects.requireNonNull(question, "question is required");
     }
 
     public String getType() {
@@ -41,7 +43,7 @@ public class Question {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = Objects.requireNonNull(type, "type is required");
     }
 
     public String getCategory() {
@@ -49,6 +51,6 @@ public class Question {
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        this.category = Objects.requireNonNull(category, "category is required");
     }
 }
