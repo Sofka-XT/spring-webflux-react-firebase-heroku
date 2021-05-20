@@ -10,6 +10,15 @@ public class Answer {
     private String userId;
     private String questionId;
     private String answer;
+    private Integer position;
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
 
     public String getId() {
         return id;

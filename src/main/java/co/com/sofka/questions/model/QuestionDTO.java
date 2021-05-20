@@ -2,7 +2,10 @@ package co.com.sofka.questions.model;
 
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class QuestionDTO {
     private String id;
@@ -14,6 +17,8 @@ public class QuestionDTO {
     private String type;
     @NotBlank
     private String category;
+    private List<AnswerDTO> answers;
+
 
     public QuestionDTO() {
 
@@ -32,6 +37,15 @@ public class QuestionDTO {
         this.question = question;
         this.type = type;
         this.category = category;
+    }
+
+    public List<AnswerDTO> getAnswers() {
+        this.answers = Optional.ofNullable(answers).orElse(new ArrayList<>());
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerDTO> answers) {
+        this.answers = answers;
     }
 
     public String getId() {

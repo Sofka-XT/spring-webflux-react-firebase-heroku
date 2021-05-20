@@ -1,50 +1,56 @@
 package co.com.sofka.questions;
 
+import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.reposioties.QuestionRepository;
-import co.com.sofka.questions.services.QuestionService;
-import org.junit.jupiter.api.*;
+import co.com.sofka.questions.reposioties.AnswerRepository;
+import co.com.sofka.questions.usecases.AddAnswerUseCase;
+import co.com.sofka.questions.usecases.CreateUseCase;
+import co.com.sofka.questions.usecases.DeleteUseCase;
+import co.com.sofka.questions.usecases.GetUseCase;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import reactor.test.StepVerifier;
 
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class QuestionsApplicationTests {
-	@Autowired
-	QuestionService questionService;
-	private QuestionDTO question;
+    @Autowired
+    CreateUseCase createUseCase;
 
-	@BeforeEach
-	public void setup(){
-		this.question = new QuestionDTO(
-				"sss",  "sss",  "ssss",  "ssss"
-		);
-	}
+    @Autowired
+    AddAnswerUseCase addAnswerUseCase;
+    @Autowired
+    GetUseCase getUseCase;
 
+    @Autowired
+    DeleteUseCase deleteUseCase;
 
-	@Test
-	@DisplayName("Validation CRUD for Service")
-	void validationCRUDService() {
-		StepVerifier.create(questionService.create(question))
-				.expectNextMatches(id -> {
-					question.setId(id);
-					return id.length() > 10;
-				})
-				.verifyComplete();
+    @Test
+    @DisplayName("Create question and answer")
+    void createQuestionAndAnswer() {
+        var question = new QuestionDTO(
+                "fffxxxx", "¿My question is ...?", "OPEN", "Developer Software"
+        );
+        StepVerifier.create(createUseCase.create(question))
+                .assertNext(question::setId)
+                .verifyComplete();
 
-		StepVerifier.create(questionService.getQuestionBy(question.getId()))
-				.expectNext(question)
-				.verifyComplete();
+        StepVerifier.create(addAnswerUseCase.addAnswer(question.getId(), new AnswerDTO(
+                question.getId(), "dddd", "my resposnse")))
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
 
-		StepVerifier.create(questionService.deleteQuestion(question.getId()))
-				.verifyComplete();
-	}
+        StepVerifier.create(getUseCase.get(question.getId()))
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
+
+        StepVerifier.create(deleteUseCase.delete(question.getId()))
+                .expectComplete()
+                .verify();
+    }
 
 
 
