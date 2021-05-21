@@ -11,46 +11,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @SpringBootTest
 class QuestionsApplicationTests {
-    @Autowired
-    CreateUseCase createUseCase;
 
-    @Autowired
-    AddAnswerUseCase addAnswerUseCase;
-    @Autowired
-    GetUseCase getUseCase;
 
-    @Autowired
-    DeleteUseCase deleteUseCase;
 
-    @Test
-    @DisplayName("Create question and answer")
-    void createQuestionAndAnswer() {
-        var question = new QuestionDTO(
-                "fffxxxx", "¿My question is ...?", "OPEN", "Developer Software"
-        );
-        StepVerifier.create(createUseCase.apply(question))
-                .assertNext(question::setId)
-                .verifyComplete();
-
-        StepVerifier.create(addAnswerUseCase.apply(new AnswerDTO(
-                question.getId(), "dddd", "my resposnse")))
-                .expectNextCount(1)
-                .expectComplete()
-                .verify();
-
-        StepVerifier.create(getUseCase.apply(question.getId()))
-                .expectNextCount(1)
-                .expectComplete()
-                .verify();
-
-        StepVerifier.create(deleteUseCase.apply(question.getId()))
-                .expectComplete()
-                .verify();
-    }
 
 
 
