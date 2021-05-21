@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 @Service
 @Validated
-public class GetUseCase {
+public class GetUseCase implements Function<String, Mono<QuestionDTO>> {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final MapperUtils mapperUtils;
@@ -23,7 +23,8 @@ public class GetUseCase {
         this.mapperUtils = mapperUtils;
     }
 
-    public Mono<QuestionDTO> get(String id) {
+    @Override
+    public Mono<QuestionDTO> apply(String id) {
         Objects.requireNonNull(id, "Id is required");
         return questionRepository.findById(id)
                 .map(mapperUtils.mapEntityToQuestion())

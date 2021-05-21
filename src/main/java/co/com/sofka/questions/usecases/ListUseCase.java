@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 
+import java.util.function.Supplier;
+
 @Service
 @Validated
-public class ListUseCase {
+public class ListUseCase implements Supplier<Flux<QuestionDTO>> {
     private final QuestionRepository questionRepository;
     private final MapperUtils mapperUtils;
 
@@ -17,7 +19,8 @@ public class ListUseCase {
         this.mapperUtils = mapperUtils;
     }
 
-    public Flux<QuestionDTO> getAll() {
+    @Override
+    public Flux<QuestionDTO> get() {
         return questionRepository.findAll()
                 .map(mapperUtils.mapEntityToQuestion());
     }

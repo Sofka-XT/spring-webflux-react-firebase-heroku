@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.util.Objects;
 
 @Service
 @Validated
-public class UpdateUseCase {
+public class UpdateUseCase implements SaveQuestion {
     private final QuestionRepository questionRepository;
     private final MapperUtils mapperUtils;
 
@@ -21,10 +20,11 @@ public class UpdateUseCase {
         this.mapperUtils = mapperUtils;
     }
 
-    public Mono<String> update(String id, @Valid QuestionDTO dto) {
-        Objects.requireNonNull(id, "Id of the question is required");
+    @Override
+    public Mono<String> apply(QuestionDTO dto) {
+        Objects.requireNonNull(dto.getId(), "Id of the question is required");
         return questionRepository
-                .save(mapperUtils.mapperToQuestion(id).apply(dto))
+                .save(mapperUtils.mapperToQuestion(dto.getId()).apply(dto))
                 .map(Question::getId);
     }
 

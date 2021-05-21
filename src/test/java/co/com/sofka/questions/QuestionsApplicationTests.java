@@ -32,22 +32,22 @@ class QuestionsApplicationTests {
         var question = new QuestionDTO(
                 "fffxxxx", "¿My question is ...?", "OPEN", "Developer Software"
         );
-        StepVerifier.create(createUseCase.create(question))
+        StepVerifier.create(createUseCase.apply(question))
                 .assertNext(question::setId)
                 .verifyComplete();
 
-        StepVerifier.create(addAnswerUseCase.addAnswer(question.getId(), new AnswerDTO(
+        StepVerifier.create(addAnswerUseCase.apply(new AnswerDTO(
                 question.getId(), "dddd", "my resposnse")))
                 .expectNextCount(1)
                 .expectComplete()
                 .verify();
 
-        StepVerifier.create(getUseCase.get(question.getId()))
+        StepVerifier.create(getUseCase.apply(question.getId()))
                 .expectNextCount(1)
                 .expectComplete()
                 .verify();
 
-        StepVerifier.create(deleteUseCase.delete(question.getId()))
+        StepVerifier.create(deleteUseCase.apply(question.getId()))
                 .expectComplete()
                 .verify();
     }

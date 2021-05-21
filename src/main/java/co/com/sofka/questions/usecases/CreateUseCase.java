@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
-
 @Service
 @Validated
-public class CreateUseCase {
+public class CreateUseCase implements SaveQuestion {
     private final QuestionRepository questionRepository;
     private final MapperUtils mapperUtils;
 
@@ -20,7 +18,8 @@ public class CreateUseCase {
         this.mapperUtils = mapperUtils;
     }
 
-    public Mono<String> create(@Valid QuestionDTO newQuestion) {
+    @Override
+    public Mono<String> apply(QuestionDTO newQuestion) {
         return questionRepository
                 .save(mapperUtils.mapperToQuestion(null).apply(newQuestion))
                 .map(Question::getId);

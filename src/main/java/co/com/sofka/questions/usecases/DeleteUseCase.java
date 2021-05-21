@@ -7,10 +7,11 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 @Service
 @Validated
-public class DeleteUseCase {
+public class DeleteUseCase implements Function<String, Mono<Void>> {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
@@ -19,10 +20,11 @@ public class DeleteUseCase {
         this.answerRepository = answerRepository;
     }
 
-    public Mono<Void> delete(String id) {
+
+    @Override
+    public Mono<Void> apply(String id) {
         Objects.requireNonNull(id, "Id is required");
         return questionRepository.deleteById(id)
                 .switchIfEmpty(Mono.defer(() -> answerRepository.deleteByQuestionId(id)));
-
     }
 }
