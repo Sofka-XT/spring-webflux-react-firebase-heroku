@@ -49,25 +49,43 @@ body {
     font-size: 3rem;
   }
   
-  .post h2 {
+  input, select, textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+  }
+
+  .question h2 {
     font-size: 2.5rem;
   }
   
-  .post-excerpt {
+  .question-excerpt {
     padding: 1.5rem 0;
     border-bottom: 1px solid #eee;
   }
   
-  .post-excerpt:first-of-type {
+  .question-excerpt:first-of-type {
     padding-top: 0;
   }
   
-  .post-excerpt h2 {
+  .question-excerpt h2 {
     margin-top: 0;
     font-size: 1.5rem;
   }
   
-  .comment {
+  .answer {
     background: #f0f0f0;
     border-radius: 4px;
     padding: 1rem 1.5rem;

@@ -12,7 +12,7 @@ export default function questionsReducer(state = initialState, action) {
     case actions.LOADING:
       return { ...state, loading: true }
     case actions.LOADED_SUCCESS:
-      return { ...action.payload, loading: false, hasErrors: false }
+      return { ...state, ...action.payload, loading: false, hasErrors: false }
     case actions.LOADED_FAILURE:
       return { ...state, loading: false, hasErrors: true }
     default:

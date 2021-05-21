@@ -1,8 +1,8 @@
 package co.com.sofka.questions.routers;
 
+import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.usecases.CreateUseCase;
-import co.com.sofka.questions.usecases.ListUseCase;
+import co.com.sofka.questions.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -34,6 +34,38 @@ public class QuestionRouter {
                                         .contentType(MediaType.TEXT_PLAIN)
                                         .bodyValue(result))
                         )
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> get(GetUseCase getUseCase) {
+        return route(
+                GET("/get/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getUseCase.apply(request.pathVariable("id")), QuestionDTO.class))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> addAnswer(AddAnswerUseCase addAnswerUseCase) {
+        return route(POST("/add").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(AnswerDTO.class)
+                        .flatMap(addAnswerDTO -> addAnswerUseCase.apply(addAnswerDTO)
+                                .flatMap(result -> ServerResponse.ok()
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                        )
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> delete(DeleteUseCase deleteUseCase) {
+        return route(
+                DELETE("/get/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.accepted()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(deleteUseCase.apply(request.pathVariable("id")), Void.class))
         );
     }
 }

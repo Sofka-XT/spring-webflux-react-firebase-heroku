@@ -8,7 +8,9 @@ import {
 
 import { Navbar } from './components/Navbar'
 import HomePage from './pages/HomePage'
+import SingleQuestionPage from './pages/SingleQuestionPage'
 import QuestionsPage from './pages/QuestionsPage'
+import QuestionFormPage from './pages/QuestionFormPage'
 
 
 const App = () => {
@@ -18,6 +20,8 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/questions" component={QuestionsPage} />
+        <Route exact path="/question/:id" component={SingleQuestionPage} />
+        <Route exact path="/new" component={QuestionFormPage} />
         <Redirect to="/" />
       </Switch>
     </Router>

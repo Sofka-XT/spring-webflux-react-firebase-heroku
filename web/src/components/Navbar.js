@@ -6,6 +6,7 @@ export const Navbar = () => (
     <section>
       <Link to="/">Home</Link>
       <Link to="/questions">Questions</Link>
+      <Link to="/new">New</Link>
     </section>
   </nav>
 )

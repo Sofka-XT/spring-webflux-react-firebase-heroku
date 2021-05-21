@@ -10,10 +10,10 @@ const SingleQuestionPage = ({
   match,
   dispatch,
   question,
-  answers,
   hasErrors,
   loading,
 }) => {
+
   useEffect(() => {
     const { id } = match.params
     dispatch(fetchQuestion(id))
@@ -27,23 +27,22 @@ const SingleQuestionPage = ({
   }
 
   const renderAnswers = () => {
-    return answers.map(answer => (
+    return (question.answers && question.answers.length) && question.answers.map(answer => (
       <Answer key={answer.id} answer={answer} />
-    ))
+    )) || <p>Empty answer!</p>;
   }
 
   return (
     <section>
       {renderQuestion()}
       <h2>Answers</h2>
-      {renderAnswers()}
+        {renderAnswers()}
     </section>
   )
 }
 
 const mapStateToProps = state => ({
   question: state.question.question,
-  answer: state.question.question.answers,
   loading: state.question.loading,
   hasErrors: state.question.hasErrors
 })

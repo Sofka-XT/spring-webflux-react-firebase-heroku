@@ -11,7 +11,7 @@ import java.util.function.Function;
 @Component
 public class MapperUtils {
 
-    protected Function<AnswerDTO, Answer> mapperToAnswer() {
+    public Function<AnswerDTO, Answer> mapperToAnswer() {
         return updateAnswer -> {
             var answer = new Answer();
             answer.setPosition(updateAnswer.getPosition());
@@ -22,7 +22,7 @@ public class MapperUtils {
         };
     }
 
-    protected Function<QuestionDTO, Question> mapperToQuestion(String id) {
+    public Function<QuestionDTO, Question> mapperToQuestion(String id) {
         return updateQuestion -> {
             var question = new Question();
             question.setId(id);
@@ -35,7 +35,7 @@ public class MapperUtils {
         };
     }
 
-    protected Function<Question, QuestionDTO> mapEntityToQuestion() {
+    public Function<Question, QuestionDTO> mapEntityToQuestion() {
         return entity -> new QuestionDTO(
                 entity.getId(),
                 entity.getUserId(),
@@ -45,7 +45,7 @@ public class MapperUtils {
         );
     }
 
-    protected Function<Answer, AnswerDTO> mapEntityToAnswer() {
+    public Function<Answer, AnswerDTO> mapEntityToAnswer() {
         return entity -> new AnswerDTO(
                 entity.getId(),
                 entity.getUserId(),

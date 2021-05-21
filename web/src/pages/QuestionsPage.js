@@ -8,8 +8,9 @@ const QuestionsPage = ({ dispatch, loading, questions, hasErrors }) => {
     useEffect(() => {
         dispatch(fetchQuestions())
     }, [dispatch])
+    
     const renderQuestions = () => {
-        if (loading) return <p>Loading posts...</p>
+        if (loading) return <p>Loading questions...</p>
         if (hasErrors) return <p>Unable to display questions.</p>
 
         return questions.map(question => <Question key={question.id} question={question} excerpt />)
