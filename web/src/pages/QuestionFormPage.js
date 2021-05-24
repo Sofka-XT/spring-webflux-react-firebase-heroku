@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { postQuestion } from '../actions/questionActions'
 import { connect } from 'react-redux'
 
-const FormPage = ({ dispatch, loading, newId, hasErrors }) => {
+const FormPage = ({ dispatch, loading, redirect, hasErrors }) => {
     const { register, handleSubmit } = useForm();
     const history = useHistory();
 
@@ -14,10 +14,10 @@ const FormPage = ({ dispatch, loading, newId, hasErrors }) => {
     };
 
     useEffect(() => {
-        if (newId) {
-            history.push(`/question/${newId}`);
+        if (redirect) {
+            history.push(redirect);
         }
-    }, [newId])
+    }, [redirect, history])
 
     return (
         <section>
@@ -50,8 +50,8 @@ const FormPage = ({ dispatch, loading, newId, hasErrors }) => {
                     <label for="question">Question</label>
                     <textarea id="question" {...register("question", { required: true, maxLength: 300 })} />
                 </div>
-                <button type="submit" className="button" disabled={!loading} >{
-                    !loading ? "Saving ...." : "Save"
+                <button type="submit" className="button" disabled={loading} >{
+                    loading ? "Saving ...." : "Save"
                 }</button>
             </form>
         </section>
@@ -61,7 +61,7 @@ const FormPage = ({ dispatch, loading, newId, hasErrors }) => {
 
 const mapStateToProps = state => ({
     loading: state.question.loading,
-    newId: state.question.newId,
+    redirect: state.question.redirect,
     hasErrors: state.question.hasErrors,
 })
 

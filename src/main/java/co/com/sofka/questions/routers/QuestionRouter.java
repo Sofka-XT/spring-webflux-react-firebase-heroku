@@ -26,6 +26,19 @@ public class QuestionRouter {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> getOwnerAll(OwnerListUseCase ownerListUseCase) {
+        return route(
+                GET("/getOwnerAll/{userId}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(ownerListUseCase.apply(
+                                request.pathVariable("userId")),
+                                QuestionDTO.class)
+                        )
+        );
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> create(CreateUseCase createUseCase) {
         return route(POST("/create").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(QuestionDTO.class)
@@ -43,7 +56,10 @@ public class QuestionRouter {
                 GET("/get/{id}").and(accept(MediaType.APPLICATION_JSON)),
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getUseCase.apply(request.pathVariable("id")), QuestionDTO.class))
+                        .body(BodyInserters.fromPublisher(getUseCase.apply(
+                                request.pathVariable("id")),
+                                QuestionDTO.class
+                        ))
         );
     }
 
@@ -62,7 +78,7 @@ public class QuestionRouter {
     @Bean
     public RouterFunction<ServerResponse> delete(DeleteUseCase deleteUseCase) {
         return route(
-                DELETE("/get/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                DELETE("/delete/{id}").and(accept(MediaType.APPLICATION_JSON)),
                 request -> ServerResponse.accepted()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(deleteUseCase.apply(request.pathVariable("id")), Void.class))

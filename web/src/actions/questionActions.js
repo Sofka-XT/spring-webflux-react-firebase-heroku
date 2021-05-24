@@ -19,7 +19,22 @@ export function fetchQuestions() {
                 `http://localhost:8080/getAll`
             )
             const data = await response.json()
-            dispatch(success({ questions: data, newId: null }))
+            dispatch(success({ questions: data, redirect: null }))
+        } catch (error) {
+            dispatch(failure())
+        }
+    }
+}
+
+export function fetchOwnerQuestions(userId) {
+    return async dispatch => {
+        dispatch(loading())
+        try {
+            const response = await fetch(
+                `http://localhost:8080/getOwnerAll/${userId}`
+            )
+            const data = await response.json()
+            dispatch(success({ questions: data, redirect: null }))
         } catch (error) {
             dispatch(failure())
         }
@@ -34,7 +49,7 @@ export function fetchQuestion(id) {
                 `http://localhost:8080/get/${id}`
             )
             const data = await response.json()
-            dispatch(success({ question: data, newId: null }))
+            dispatch(success({ question: data, redirect: null }))
         } catch (error) {
             dispatch(failure())
         }
@@ -56,9 +71,53 @@ export function postQuestion(question) {
                 }
             )
             const id = await response.text()
-            dispatch(success({newId: id}));
+            dispatch(success({redirect: `/question/${id}`}));
         } catch (error) {
             dispatch(failure())
         }
     }
 }
+
+export function deleteQuestion(id) {
+    return async dispatch => {
+        dispatch(loading())
+        try {
+            await fetch(`http://localhost:8080/delete/${id}`,
+                {
+                    method: 'DELETE',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            dispatch(success({redirect: `/list`}));
+        } catch (error) {
+            dispatch(failure())
+        }
+    }
+}
+
+export function postAnswer(answer) {
+    return async dispatch => {
+        dispatch(loading())
+        try {
+            const response = await fetch(`http://localhost:8080/add`,
+                {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(answer)
+                }
+            )
+            const data = await response.json()
+            console.log(data);
+            dispatch(success({redirect: `/question/${answer.questionId}`, questions: data}));
+        } catch (error) {
+            dispatch(failure())
+        }
+    }
+}
+
