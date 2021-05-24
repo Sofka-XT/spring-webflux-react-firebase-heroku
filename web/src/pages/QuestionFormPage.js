@@ -9,7 +9,7 @@ const FormPage = ({ dispatch, loading, redirect, hasErrors }) => {
     const history = useHistory();
 
     const onSubmit = data => {
-        data.userId = "aaaaa";
+        data.userId =  localStorage.getItem("uid");
         dispatch(postQuestion(data));
     };
 

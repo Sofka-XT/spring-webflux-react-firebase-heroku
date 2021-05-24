@@ -15,6 +15,7 @@ const SingleQuestionPage = ({
   loading,
 }) => {
   const { id } = match.params
+  const userId = localStorage.getItem("uid");
 
   useEffect(() => {
     dispatch(fetchQuestion(id))
@@ -36,9 +37,10 @@ const SingleQuestionPage = ({
   return (
     <section>
       {renderQuestion()}
-      <Link to={"/answer/" + id} className="button right">
+      {userId && <Link to={"/answer/" + id} className="button right">
         Reply
-      </Link>
+      </Link>}
+
       <h2>Answers</h2>
       {renderAnswers()}
     </section>

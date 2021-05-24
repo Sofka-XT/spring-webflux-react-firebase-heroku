@@ -11,7 +11,7 @@ const FormPage = ({ dispatch, loading, redirect, match,hasErrors, question }) =>
     const history = useHistory();
 
     const onSubmit = data => {
-        data.userId = "aaaaa";
+        data.userId =  localStorage.getItem("uid");
         data.questionId = id;
         dispatch(postAnswer(data));
     };
