@@ -1,3 +1,5 @@
+const URL_BASE = 'https://damp-refuge-49052.herokuapp.com';
+
 export const LOADING = 'LOADING'
 export const LOADED_SUCCESS = 'LOADED_SUCCESS'
 export const LOADED_FAILURE = 'LOADED_FAILURE'
@@ -16,7 +18,7 @@ export function fetchQuestions() {
         dispatch(loading())
         try {
             const response = await fetch(
-                `http://localhost:8080/getAll`
+                `${URL_BASE}/getAll`
             )
             const data = await response.json()
             dispatch(success({ questions: data, redirect: null }))
@@ -30,9 +32,7 @@ export function fetchOwnerQuestions(userId) {
     return async dispatch => {
         dispatch(loading())
         try {
-            const response = await fetch(
-                `http://localhost:8080/getOwnerAll/${userId}`
-            )
+            const response = await fetch(`${URL_BASE}/getOwnerAll/${userId}`)
             const data = await response.json()
             dispatch(success({ questions: data, redirect: null }))
         } catch (error) {
@@ -45,9 +45,7 @@ export function fetchQuestion(id) {
     return async dispatch => {
         dispatch(loading())
         try {
-            const response = await fetch(
-                `http://localhost:8080/get/${id}`
-            )
+            const response = await fetch(`${URL_BASE}/get/${id}`)
             const data = await response.json()
             dispatch(success({ question: data, redirect: null }))
         } catch (error) {
@@ -60,7 +58,7 @@ export function postQuestion(question) {
     return async dispatch => {
         dispatch(loading())
         try {
-            const response = await fetch(`http://localhost:8080/create`,
+            const response = await fetch(`${URL_BASE}/create`,
                 {
                     method: 'POST',
                     mode: 'cors',
@@ -82,7 +80,7 @@ export function deleteQuestion(id) {
     return async dispatch => {
         dispatch(loading())
         try {
-            await fetch(`http://localhost:8080/delete/${id}`,
+            await fetch(`${URL_BASE}/delete/${id}`,
                 {
                     method: 'DELETE',
                     mode: 'cors',
@@ -102,7 +100,7 @@ export function postAnswer(answer) {
     return async dispatch => {
         dispatch(loading())
         try {
-            const response = await fetch(`http://localhost:8080/add`,
+            const response = await fetch(`${URL_BASE}/add`,
                 {
                     method: 'POST',
                     mode: 'cors',
@@ -113,8 +111,7 @@ export function postAnswer(answer) {
                 }
             )
             const data = await response.json()
-            console.log(data);
-            dispatch(success({redirect: `/question/${answer.questionId}`, questions: data}));
+            dispatch(success({redirect: `/question/${answer.questionId}`}));
         } catch (error) {
             dispatch(failure())
         }

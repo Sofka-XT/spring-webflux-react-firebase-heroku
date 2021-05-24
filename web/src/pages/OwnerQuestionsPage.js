@@ -6,13 +6,13 @@ import { Question } from '../components/Question'
 
 const OwnerQuestionsPage = ({ dispatch, loading, questions, hasErrors, redirect }) => {
     useEffect(() => {
-        const userId = "aaaaa"
+        const userId =  localStorage.getItem("uid");
         dispatch(fetchOwnerQuestions(userId))
     }, [dispatch]);
 
     useEffect(() => {
         if (redirect) {
-            const userId = "aaaaa"
+            const userId =  localStorage.getItem("uid");
             dispatch(fetchOwnerQuestions(userId))
         }
     }, [redirect, dispatch]);
