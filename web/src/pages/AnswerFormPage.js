@@ -5,13 +5,13 @@ import {  fetchQuestion, postAnswer } from '../actions/questionActions'
 import { connect } from 'react-redux'
 import { Question } from '../components/Question'
 
-const FormPage = ({ dispatch, loading, redirect, match,hasErrors, question }) => {
+const FormPage = ({ dispatch, loading, redirect, match,hasErrors, question, userId }) => {
     const { register, handleSubmit } = useForm();
     const { id } = match.params
     const history = useHistory();
 
     const onSubmit = data => {
-        data.userId =  localStorage.getItem("uid");
+        data.userId =  userId;
         data.questionId = id;
         dispatch(postAnswer(data));
     };
@@ -58,6 +58,7 @@ const mapStateToProps = state => ({
     redirect: state.question.redirect,
     question: state.question.question,
     hasErrors: state.question.hasErrors,
+    userId: state.auth.uid
 })
 
 export default connect(mapStateToProps)(FormPage)

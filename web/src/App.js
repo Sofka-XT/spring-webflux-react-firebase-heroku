@@ -5,10 +5,11 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
+import { connect } from 'react-redux';
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-
+import { login, logout } from './actions/authActions';
 
 import { PublicNavbar, PrivateNavbar } from './components/Navbar'
 import HomePage from './pages/HomePage'
@@ -30,11 +31,10 @@ firebase.initializeApp({
 
 const auth = firebase.auth();
 
-
-const App = () => {
+const App = ({ dispatch }) => {
   const [user] = useAuthState(auth);
-  if(user?.uid){
-    localStorage.setItem("uid", user?.uid);
+  if(user){
+    dispatch(login(user.email, user.uid))
   }
   return (
     <Router>
@@ -43,7 +43,7 @@ const App = () => {
           <PrivateNavbar />
           <Switch>
             <Route exact path="/" component={() => {
-              return <HomePage><SignOut /></HomePage>
+              return <HomePage><SignOut dispatch={dispatch} /></HomePage>
             }} />
             <Route exact path="/questions" component={QuestionsPage} />
             <Route exact path="/question/:id" component={SingleQuestionPage} />
@@ -57,7 +57,7 @@ const App = () => {
           <PublicNavbar />
           <Switch>
             <Route exact path="/" component={() => {
-              return <HomePage><SignIn /></HomePage>
+              return <HomePage><SignIn dispatch={dispatch} /></HomePage>
             }} />
             <Route exact path="/questions" component={QuestionsPage} />
             <Route exact path="/question/:id" component={SingleQuestionPage} />
@@ -79,13 +79,13 @@ function SignIn() {
   return <button className="button right" onClick={signInWithGoogle}>Sign in with google</button>;
 }
 
-function SignOut() {
+function SignOut({ dispatch }) {
   return (
     auth.currentUser && (
       <button
         className="button right"
         onClick={() => {
-          localStorage.removeItem("uid");
+          dispatch(logout())
           auth.signOut();
         }}
       >
@@ -96,4 +96,4 @@ function SignOut() {
 }
 
 
-export default App
+export default connect()(App)

@@ -100,7 +100,7 @@ export function postAnswer(answer) {
     return async dispatch => {
         dispatch(loading())
         try {
-            const response = await fetch(`${URL_BASE}/add`,
+            await fetch(`${URL_BASE}/add`,
                 {
                     method: 'POST',
                     mode: 'cors',
@@ -110,7 +110,6 @@ export function postAnswer(answer) {
                     body: JSON.stringify(answer)
                 }
             )
-            const data = await response.json()
             dispatch(success({redirect: `/question/${answer.questionId}`}));
         } catch (error) {
             dispatch(failure())

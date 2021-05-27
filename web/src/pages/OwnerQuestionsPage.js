@@ -4,18 +4,16 @@ import { connect } from 'react-redux'
 import { fetchOwnerQuestions, deleteQuestion } from '../actions/questionActions'
 import { Question } from '../components/Question'
 
-const OwnerQuestionsPage = ({ dispatch, loading, questions, hasErrors, redirect }) => {
+const OwnerQuestionsPage = ({ dispatch, loading, questions, hasErrors, redirect, userId }) => {
     useEffect(() => {
-        const userId =  localStorage.getItem("uid");
         dispatch(fetchOwnerQuestions(userId))
-    }, [dispatch]);
+    }, [dispatch, userId]);
 
     useEffect(() => {
         if (redirect) {
-            const userId =  localStorage.getItem("uid");
             dispatch(fetchOwnerQuestions(userId))
         }
-    }, [redirect, dispatch]);
+    }, [redirect, dispatch, userId]);
 
     const onDelete = (id) => {
         dispatch(deleteQuestion(id))
@@ -45,6 +43,7 @@ const mapStateToProps = state => ({
     questions: state.question.questions,
     hasErrors: state.question.hasErrors,
     redirect: state.question.redirect,
+    userId: state.auth.uid
 })
 
 export default connect(mapStateToProps)(OwnerQuestionsPage)

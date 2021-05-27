@@ -13,10 +13,9 @@ const SingleQuestionPage = ({
   question,
   hasErrors,
   loading,
+  userId
 }) => {
   const { id } = match.params
-  const userId = localStorage.getItem("uid");
-
   useEffect(() => {
     dispatch(fetchQuestion(id))
   }, [dispatch, id])
@@ -50,7 +49,8 @@ const SingleQuestionPage = ({
 const mapStateToProps = state => ({
   question: state.question.question,
   loading: state.question.loading,
-  hasErrors: state.question.hasErrors
+  hasErrors: state.question.hasErrors,
+  userId: state.auth.uid
 })
 
 export default connect(mapStateToProps)(SingleQuestionPage)
