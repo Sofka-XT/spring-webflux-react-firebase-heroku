@@ -5,7 +5,6 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { connect } from 'react-redux';
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
@@ -96,4 +95,4 @@ function SignOut({ dispatch }) {
 }
 
 
-export default connect()(App)
+export default App
