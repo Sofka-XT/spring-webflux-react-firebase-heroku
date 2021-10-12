@@ -9,6 +9,7 @@ const FormPage = ({ dispatch, loading, redirect, userId }) => {
     const history = useHistory();
 
     const onSubmit = data => {
+        data.userId = userId;
         dispatch(postQuestion(data));
     };
 

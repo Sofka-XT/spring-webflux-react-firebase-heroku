@@ -1,4 +1,4 @@
-const URL_BASE = 'https://damp-refuge-49052.herokuapp.com';
+const URL_BASE = 'http://localhost:8080';
 
 export const LOADING = 'LOADING'
 export const LOADED_SUCCESS = 'LOADED_SUCCESS'
