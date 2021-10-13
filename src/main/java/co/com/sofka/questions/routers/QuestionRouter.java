@@ -9,16 +9,19 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+import java.util.function.Function;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
 public class QuestionRouter {
+
     @Bean
     public RouterFunction<ServerResponse> getAll(ListUseCase listUseCase) {
-        return route(
-                GET("/getAll").and(accept(MediaType.APPLICATION_JSON)),
+        return route(GET("/getAll"),
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(listUseCase.get(), QuestionDTO.class))
@@ -28,25 +31,26 @@ public class QuestionRouter {
     @Bean
     public RouterFunction<ServerResponse> getOwnerAll(OwnerListUseCase ownerListUseCase) {
         return route(
-                GET("/getOwnerAll/{userId}").and(accept(MediaType.APPLICATION_JSON)),
+                GET("/getOwnerAll/{userId}"),
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(ownerListUseCase.apply(
-                                request.pathVariable("userId")),
-                                QuestionDTO.class)
-                        )
+                        .body(BodyInserters.fromPublisher(
+                                ownerListUseCase.apply(request.pathVariable("userId")),
+                                QuestionDTO.class
+                         ))
         );
     }
 
     @Bean
     public RouterFunction<ServerResponse> create(CreateUseCase createUseCase) {
-        return route(POST("/create").and(accept(MediaType.APPLICATION_JSON)),
-                request -> request.bodyToMono(QuestionDTO.class)
-                        .flatMap(questionDTO -> createUseCase.apply(questionDTO)
-                                .flatMap(result -> ServerResponse.ok()
-                                        .contentType(MediaType.TEXT_PLAIN)
-                                        .bodyValue(result))
-                        )
+        Function<QuestionDTO, Mono<ServerResponse>> executor = questionDTO ->  createUseCase.apply(questionDTO)
+                .flatMap(result -> ServerResponse.ok()
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .bodyValue(result));
+
+        return route(
+                POST("/create").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(QuestionDTO.class).flatMap(executor)
         );
     }
 
